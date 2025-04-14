@@ -1,0 +1,11 @@
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\bin\Debug\net8.0\REPO.Core.deps.json
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\bin\Debug\net8.0\REPO.Core.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\bin\Debug\net8.0\REPO.Core.pdb
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.GeneratedMSBuildEditorConfig.editorconfig
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.AssemblyInfoInputs.cache
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.AssemblyInfo.cs
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.csproj.CoreCompileInputs.cache
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\refint\REPO.Core.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.pdb
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\ref\REPO.Core.dll

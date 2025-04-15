@@ -10,7 +10,7 @@ namespace REPO.Core.Models
     public class Region
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
@@ -19,5 +19,7 @@ namespace REPO.Core.Models
         public string Code{ get; set; }
         [Required, MaxLength(300)]
         public string RegionImageURL{ get; set; }
+
+        public ICollection<Walk> Walks { get; set; }=new List<Walk>();  
     }
 }

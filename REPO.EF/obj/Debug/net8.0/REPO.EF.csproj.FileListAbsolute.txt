@@ -15,3 +15,4 @@ E:\3-.NET\9-Projects\NZWalks&Regions\REPO.EF\obj\Debug\net8.0\refint\REPO.EF.dll
 E:\3-.NET\9-Projects\NZWalks&Regions\REPO.EF\obj\Debug\net8.0\REPO.EF.pdb
 E:\3-.NET\9-Projects\NZWalks&Regions\REPO.EF\obj\Debug\net8.0\REPO.EF.genruntimeconfig.cache
 E:\3-.NET\9-Projects\NZWalks&Regions\REPO.EF\obj\Debug\net8.0\ref\REPO.EF.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.EF\obj\Debug\net8.0\REPO.EF.sourcelink.json

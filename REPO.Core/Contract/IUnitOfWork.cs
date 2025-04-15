@@ -10,6 +10,8 @@ namespace REPO.Core.Contract
     public interface IUnitOfWork:IDisposable
     {
         IBaseRepository<Region> Region { get; }
+        IBaseRepository<Walk> Walk { get; }
+        
         Task CompleteAsync();
     }
 }

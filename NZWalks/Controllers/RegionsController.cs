@@ -6,9 +6,8 @@ using REPO.Core.Models;
 
 namespace NZ.Walks.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RegionsController : ControllerBase
+    
+    public class RegionsController : BaseController
     {
         private readonly IUnitOfWork _unitofWork;
         private readonly IMapper _mapper;
@@ -27,6 +26,9 @@ namespace NZ.Walks.Controllers
             var regionsDTOList=_mapper.Map<List<RegionDTO>>(regions);
 
             return Ok(regionsDTOList);
+
+
+          
         }
 
 
@@ -50,6 +52,7 @@ namespace NZ.Walks.Controllers
 
 
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Create([FromBody] RegionDTO regionDTO)
         {
             if (ModelState.IsValid)
@@ -74,6 +77,7 @@ namespace NZ.Walks.Controllers
 
 
         [HttpPut("{id:guid}")]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Upadte(Guid id, [FromBody] UpdateRegionRequestDTO UpdateregionDTO)
         {
             Region? region = await _unitofWork.Region.GetByIdAsync(id);
@@ -87,6 +91,8 @@ namespace NZ.Walks.Controllers
             //  UpdateregionDTO.ConvertToUpdatedRegion(region);
             region = _mapper.Map(UpdateregionDTO, region); // Convert to region without creating new entity
            await _unitofWork.Region.UpdateAsync(region);
+
+
             await _unitofWork.CompleteAsync();
 
 
@@ -100,6 +106,7 @@ namespace NZ.Walks.Controllers
 
 
         [HttpDelete("{id:guid}")]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
               Region? region= await _unitofWork.Region.DeleteAsync(id);
@@ -115,14 +122,30 @@ namespace NZ.Walks.Controllers
 
 
 
+   //   [HttpGet("{regionName:alpha}")]
+   //   public async  Task<IActionResult> GetRegionsByName(string regionName)
+   //   {
+   //
+   //       IEnumerable<Region> regions = await _unitofWork.Region.GetFilteredAsync(x => x.Name == regionName);
+   //
+   //       List<RegionDTO> regionsDTO = _mapper.Map<List<RegionDTO>>(regions);
+   //
+   //       return Ok(regionsDTO);
+   //   }
+   //
+   // [HttpGet("orderd/{regionName:alpha}")]
+   //   public async  Task<IActionResult> GetFietredOrderedRegionByName(string regionName,[FromQuery]bool ordering)
+   //   {
+   //
+   //       IEnumerable<Region> regions = await _unitofWork.Region.GetFiltered_OrderedAsync
+   //           (x => x.Name == regionName,x=>x.Name,null, ordering);
+   //
+   //       List<RegionDTO> regionsDTO = _mapper.Map<List<RegionDTO>>(regions);
+   //
+   //       return Ok(regionsDTO);
+   //   }
 
-        [NonAction]
-        private List<string> ProjectTherErrors()
-        {
-            return ModelState.Values
-                    .SelectMany(x => x.Errors)
-                    .Select(e => e.ErrorMessage).ToList();
-        }
+     
 
 
     }

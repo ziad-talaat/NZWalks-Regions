@@ -10,14 +10,14 @@ namespace REPO.Core.Models
 {
     public class Walk
     {
-
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         [Required,MaxLength(100)]
         public string Name { get; set; }
         [Required, MaxLength(1000)]
         public string Description { get; set; }
-        [Required,MaxLength(100)]
+        [Required]
+        [Range(0, 999.99)]
         public double LengthInKM { get; set; }
         [Required, MaxLength(300)]
         public string WalkingImageURL { get; set; }
@@ -32,3 +32,4 @@ namespace REPO.Core.Models
         public Difficulty Difficulty { get; set; }
     }
 }
+        

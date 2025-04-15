@@ -14,10 +14,15 @@ namespace REPO.EF
     {
         private readonly AppDbContext _context;
         public IBaseRepository<Region> Region { get;private set; }
+
+        public IBaseRepository<Walk> Walk { get;private set; }  
+       
+
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
             Region = new BaseRepository<Region>(_context);
+            Walk= new BaseRepository<Walk>(_context);
         }
 
 

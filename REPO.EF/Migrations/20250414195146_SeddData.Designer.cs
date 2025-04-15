@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using REPO.EF.Data;
 
@@ -11,9 +12,11 @@ using REPO.EF.Data;
 namespace REPO.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250414195146_SeddData")]
+    partial class SeddData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,6 +124,7 @@ namespace REPO.EF.Migrations
                         .HasColumnType("int");
 
                     b.Property<double>("LengthInKM")
+                        .HasMaxLength(100)
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
@@ -148,13 +152,13 @@ namespace REPO.EF.Migrations
             modelBuilder.Entity("REPO.Core.Models.Walk", b =>
                 {
                     b.HasOne("REPO.Core.Models.Difficulty", "Difficulty")
-                        .WithMany("Walks")
+                        .WithMany()
                         .HasForeignKey("DifficultyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("REPO.Core.Models.Region", "Region")
-                        .WithMany("Walks")
+                        .WithMany()
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -162,16 +166,6 @@ namespace REPO.EF.Migrations
                     b.Navigation("Difficulty");
 
                     b.Navigation("Region");
-                });
-
-            modelBuilder.Entity("REPO.Core.Models.Difficulty", b =>
-                {
-                    b.Navigation("Walks");
-                });
-
-            modelBuilder.Entity("REPO.Core.Models.Region", b =>
-                {
-                    b.Navigation("Walks");
                 });
 #pragma warning restore 612, 618
         }

@@ -14,5 +14,7 @@ namespace REPO.Core.Models
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
+        public ICollection<Walk> Walks { get; set; } = new List<Walk>();
     }
 }

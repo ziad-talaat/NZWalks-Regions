@@ -10,6 +10,13 @@ namespace NZ.Walks.Mapping
         {
             CreateMap<Region, RegionDTO>().ReverseMap();
             CreateMap<Region, UpdateRegionRequestDTO>().ReverseMap();
+            CreateMap<Walk,WalkRequestDTO>().ReverseMap();
+         //   CreateMap<Walk,WalkResponseDTO>().ReverseMap();
+
+            CreateMap<Walk, WalkResponseDTO>()
+                .ForMember(x => x.DifficultyName, x => x.MapFrom(x => x.Difficulty.Name))
+                .ForMember(x => x.RegionName, x => x.MapFrom(x => x.Region.Name)).ReverseMap();
+                
         }
     }
 }

@@ -9,3 +9,4 @@ E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.dll
 E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\refint\REPO.Core.dll
 E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.pdb
 E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\ref\REPO.Core.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\REPO.Core\obj\Debug\net8.0\REPO.Core.sourcelink.json

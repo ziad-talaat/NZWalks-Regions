@@ -18,9 +18,11 @@ namespace REPO.Core.Contract
 
 
 
+        Task<IEnumerable<T>> GetOrderedBy( string orderUsing, string[] includes = null,  bool isAssending = true);
 
 
 
-       //Task<IEnumerable<T>> GetFilteredAsyncUsingReflecton(string filterProperty, string filterValue, string[] includes = null);
+       Task<IEnumerable<T>> GetFilteredAsyncUsingReflecton(string filterProperty, string filterValue, string[] includes = null);
+        Task<IEnumerable<T>> GetFiltered_OrderedAsyncUsingReflecton(string filterProperty, string filterValue, string orderProperty, string[] includes = null, bool IsAssending = true);
     }
 }

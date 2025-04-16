@@ -106,6 +106,27 @@
   },
   {
     "ContainingType": "NZ.Walks.Controllers.WalksController",
+    "Method": "GetFilteredWalks",
+    "RelativePath": "api/Walks/{filterBy},{value}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filterBy",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "value",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.WalksController",
     "Method": "GetByID",
     "RelativePath": "api/Walks/{id}",
     "HttpMethod": "GET",
@@ -159,15 +180,30 @@
   },
   {
     "ContainingType": "NZ.Walks.Controllers.WalksController",
-    "Method": "GetWalksByDifficultyLevel",
-    "RelativePath": "api/Walks/{walkDiff}",
+    "Method": "GetFilteredWalks",
+    "RelativePath": "api/Walks/Filter/Order/{filterBy},{value},{orderProperty},{ordering}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "walkDiff",
+        "Name": "filterBy",
         "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "value",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderProperty",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "ordering",
+        "Type": "System.Boolean",
         "IsRequired": true
       }
     ],
@@ -175,21 +211,21 @@
   },
   {
     "ContainingType": "NZ.Walks.Controllers.WalksController",
-    "Method": "GetWalksByDifficultyLevelOrderedByName",
-    "RelativePath": "api/Walks/orderd/{walkDiff}",
+    "Method": "GetWalksOrderBy",
+    "RelativePath": "api/Walks/Order/{OrderBy},{ordering}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "walkDiff",
+        "Name": "OrderBy",
         "Type": "System.String",
         "IsRequired": true
       },
       {
         "Name": "ordering",
         "Type": "System.Boolean",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

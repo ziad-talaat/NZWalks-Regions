@@ -118,41 +118,40 @@ namespace NZ.Walks.Controllers
 
 
 
-          [HttpGet("{walkDiff:alpha}")]
-          public async  Task<IActionResult> GetWalksByDifficultyLevel(string walkDiff)
+          [HttpGet("{filterBy},{value}")]
+          public async  Task<IActionResult> GetFilteredWalks(string filterBy,string value)
           {
        
-              IEnumerable<Walk> walks = await _unitOfWork.Walk.GetFilteredAsync(x => x.Difficulty.Name == walkDiff, new[] { "Difficulty", "Region" });
+              IEnumerable<Walk> walks = await _unitOfWork.Walk.GetFilteredAsyncUsingReflecton(filterBy,value);  
        
               List<WalkResponseDTO> walkResponse = _mapper.Map<List<WalkResponseDTO>>(walks);
        
               return Ok(walkResponse);
           }
+
        
-        [HttpGet("orderd/{walkDiff:alpha}")]
-          public async  Task<IActionResult> GetWalksByDifficultyLevelOrderedByName(string walkDiff,[FromQuery]bool ordering)
+        [HttpGet("Order/{OrderBy},{ordering:bool}")]
+          public async  Task<IActionResult> GetWalksOrderBy(string OrderBy,bool ordering)
           {
-       
-              IEnumerable<Walk> walks = await _unitOfWork.Walk.GetFiltered_OrderedAsync
-                  (x => x.Difficulty.Name == walkDiff, x=>x.Name, new[] { "Difficulty", "Region" }, ordering);
+
+            IEnumerable<Walk> walks = await _unitOfWork.Walk.GetOrderedBy(OrderBy, new[] { "Difficulty", "Region" }, ordering);
+                
        
               List<WalkResponseDTO> regionsDTO = _mapper.Map<List<WalkResponseDTO>>(walks);
        
               return Ok(regionsDTO);
           }
 
-       //  [HttpGet("orderdByRef/{walkDiff:alpha}")]
-       //   public async  Task<IActionResult> GetWalksByDifficultyLevelOrderedByName(string walkDiff, [FromQuery]string filterval)
-       //   {
-       //
-       //     IEnumerable<Walk> walks = await _unitOfWork.Walk.GetFilteredAsyncUsingReflecton
-       //       (filterProperty: walkDiff, filterValue: filterval, new[] { "Difficulty", "Region" });
-       //
-       //       List<WalkResponseDTO> regionsDTO = _mapper.Map<List<WalkResponseDTO>>(walks);
-       //
-       //       return Ok(regionsDTO);
-       //   }
+        [HttpGet("Filter/Order/{filterBy},{value},{orderProperty},{ordering:bool}")]
+        public async Task<IActionResult> GetFilteredWalks(string filterBy, string value,string orderProperty,bool ordering)
+        {
 
+            IEnumerable<Walk> walks = await _unitOfWork.Walk.GetFiltered_OrderedAsyncUsingReflecton(filterBy,value,orderProperty,null,ordering);
+
+            List<WalkResponseDTO> walkResponse = _mapper.Map<List<WalkResponseDTO>>(walks);
+
+            return Ok(walkResponse);
+        }
 
 
 

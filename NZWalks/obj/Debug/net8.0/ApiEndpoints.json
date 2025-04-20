@@ -79,13 +79,66 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "NZ.Walks.Controllers.UserController",
+    "Method": "Login",
+    "RelativePath": "api/User/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "login",
+        "Type": "REPO.Core.DTO.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.UserController",
+    "Method": "Register",
+    "RelativePath": "api/User/Register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "register",
+        "Type": "REPO.Core.DTO.RegisterDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "NZ.Walks.Controllers.WalksController",
-    "Method": "GetAll",
+    "Method": "GetAllOrderInPage",
     "RelativePath": "api/Walks",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "sortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isAssending",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -205,6 +258,47 @@
         "Name": "ordering",
         "Type": "System.Boolean",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.WalksController",
+    "Method": "GetAllOrder_SortedInPage",
+    "RelativePath": "api/Walks/GetSortSilterPage",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "filterOn",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "filterQuery",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sortBy",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "isAssending",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

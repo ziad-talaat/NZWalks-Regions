@@ -1,4 +1,5 @@
-﻿using REPO.Core.Models;
+﻿using NZ.Walks.Controllers;
+using REPO.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace REPO.Core.Contract
     {
         IBaseRepository<Region> Region { get; }
         IBaseRepository<Walk> Walk { get; }
+        IUserRepository AppUser { get; }
         
         Task CompleteAsync();
     }

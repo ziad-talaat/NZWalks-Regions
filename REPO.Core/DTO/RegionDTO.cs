@@ -11,6 +11,7 @@ namespace REPO.Core.DTO
     {
 
 
+      
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }

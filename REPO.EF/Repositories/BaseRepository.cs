@@ -1,7 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using REPO.Core.Contract;
 using REPO.EF.Data;
+using System.Globalization;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 
 namespace REPO.EF.Repositories
@@ -123,22 +129,8 @@ namespace REPO.EF.Repositories
                 }
             }
         
-            if(!string.IsNullOrEmpty(filterProperty)&& filterValue != null)
-            {
-                var parameter = Expression.Parameter(typeof(T), "x");
-                var property = Expression.Property(parameter, filterProperty);
-
-
-                var propertyType = property.Type;
-
-                object convertedValue = Convert.ChangeType(filterValue, propertyType);
-
-                var constant=Expression.Constant(convertedValue,propertyType);
-                var equality = Expression.Equal(property, constant);
-                var lambda = Expression.Lambda<Func<T, bool>>(equality, parameter);
-        
-                query= query.Where(lambda);
-            }
+            query=BuildFilter(query,filterProperty, filterValue);
+           
             return await query.ToListAsync();
         }
 
@@ -153,44 +145,11 @@ namespace REPO.EF.Repositories
                 }
             }
 
-            if (!string.IsNullOrEmpty(filterProperty) && filterValue != null)
-            {
-                var parameter = Expression.Parameter(typeof(T), "x");
-                var property = Expression.Property(parameter, filterProperty);
-
-                var propertyType = property.Type;
-
-                object convertedValue = Convert.ChangeType(filterValue, propertyType);
-
-                var constant = Expression.Constant(convertedValue,propertyType);
-                var equality = Expression.Equal(property, constant);   //Equal this build the == part  first param for left side and second for right side
-                var lambda = Expression.Lambda<Func<T, bool>>(equality, parameter);
-                 
-                query = query.Where(lambda);
-            }
+           query=BuildFilter(query,filterProperty,filterValue);
 
 
 
-            if(!string.IsNullOrEmpty(orderProperty))
-            {
-                var parameter=Expression.Parameter(typeof(T), "x");
-                var property=Expression.Property(parameter, orderProperty);
-                var propertyType=property.Type;
-
-                var lambda = Expression.Lambda(property, parameter);
-
-                string methodName=IsAssending ? "OrderBy" :"OrderByDescending";
-
-                var result = Expression.Call(
-                    typeof(Queryable),
-                    methodName,
-                    new Type[] { typeof(T), propertyType },
-                    query.Expression,
-                    Expression.Quote(lambda));
-
-                query=query.Provider.CreateQuery<T>(result);    
-
-            }
+          query=BuildSort(query,orderProperty, IsAssending);
 
 
             return await query.ToListAsync();
@@ -207,32 +166,130 @@ namespace REPO.EF.Repositories
                 }
             }
 
-            if (!string.IsNullOrEmpty(orderUsing))
+            query = BuildSort(query,orderUsing,isAssending);
+
+
+            return await query.ToListAsync();
+        }
+
+
+
+        public async Task<IEnumerable<T>> GetFilteredSortedPageAsync(string? filterOn, string? filterQuery,
+          string? sortBy, bool isAssending, string[] includes = null, int pageNumber = 1, int pageSize = 10)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            includes ??= Array.Empty<string>();
+
+            foreach (var include in includes)
             {
-                var parameter = Expression.Parameter(typeof(T), "x");
-
-                //property is x.somthing           the 'x' is parameter amd the somthing is 'orderUsing' 
-                var property = Expression.Property(parameter, orderUsing);
-                var propertyType = property.Type;
-
-                var lambda = Expression.Lambda(property, parameter);
-
-                string methodName = isAssending ? "OrderBy" : "OrderByDescending";
-
-                var result = Expression.Call(
-                    typeof(Queryable),   //static class that contain the OrderBy Method
-                    methodName,          // ORderBy  or ORderByDesincding
-                    new Type[] { typeof(T), propertyType }, //  This tells the compiler the generic types
-                    query.Expression, // The current LINQ expression tree.
-                    Expression.Quote(lambda));//Wraps the lambda so it's treated as an expression
-
-                query = query.Provider.CreateQuery<T>(result);
-
+                query = query.Include(include);
             }
+
+            query=  BuildFilter(query, filterOn, filterQuery);
+
+
+
+             query =BuildSort(query,sortBy,isAssending);    
+
+
+            int skip = (pageNumber - 1) * pageSize;
+
+            query = query.Skip(skip).Take(pageSize);
 
 
             return await query.ToListAsync();
 
         }
+
+
+
+        public async Task<IEnumerable<T>> GetSortedPageAsync(string? sortBy, bool isAssending, string[] includes = null, int pageNumber = 1, int pageSize = 10)
+        {
+
+            IQueryable<T> query = _context.Set<T>();
+          
+            includes??=Array.Empty<string>();   
+
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            int skip = (pageNumber -1) *pageSize;
+
+            query = query.Skip(skip).Take(pageSize);
+
+           query= BuildSort(query, sortBy, isAssending);
+
+            return await query.ToListAsync();
+
+        }
+
+
+
+
+        private IQueryable<T> BuildSort(IQueryable<T> query,string? sortBy, bool isAssending = true)
+        {
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                //x => ...
+                var parameter = Expression.Parameter(typeof(T), "x");
+
+
+                // x.sortBy
+                var property = Expression.Property(parameter, sortBy);
+
+                //get the type of property at runtime like string or what
+                var propertyType = property.Type;
+
+                //x => x.proeprty
+                var lambda = Expression.Lambda(property, parameter);
+
+                string methodName = isAssending ? "OrderBy" : "OrderByDescending";
+
+                var result = Expression.Call(
+
+                    typeof(Queryable), //class that contains the method
+                    methodName,    //the method to call
+                    new Type[] { typeof(T), propertyType }, //  These are the generic types for the   OrderBy<T, TKey>.
+                    query.Expression,  //The current state of the query before ordering.
+                    Expression.Quote(lambda)//Wraps the lambda as an expression tree for LINQ to interpret.
+                    );
+
+
+
+                query = query.Provider.CreateQuery<T>(result);  //This actually executes the expression tree and creates a new `IQueryable<T>` that includes the ordering you just dynamically added.
+                                                                // `CreateQuery < T >` tells EF Core to **build the final LINQ query** using your custom-built expression.
+            }
+            return query;
+        }
+        private IQueryable<T> BuildFilter(IQueryable<T> query, string? filterOn, string? filterQuery) 
+        {
+            if (!string.IsNullOrEmpty(filterOn) && filterQuery != null)
+            {
+                var parameter = Expression.Parameter(typeof(T), "x");
+
+                //x.filterOn
+                var property = Expression.Property(parameter, filterOn);
+
+                var propertyType = property.Type;
+
+                object convertedValue = Convert.ChangeType(filterQuery, propertyType);
+
+                // have the value 
+                var constant = Expression.Constant(convertedValue, propertyType);
+
+                // x.property==value
+                var equality = Expression.Equal(property, constant);   //Equal this build the == part  first param for left side and second for right side
+
+                //x=>x.property==value
+                var lambda = Expression.Lambda<Func<T, bool>>(equality, parameter);
+
+                query = query.Where(lambda);
+            }
+
+            return query;
+        }
+    
     }
 }

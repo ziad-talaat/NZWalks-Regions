@@ -11,6 +11,16 @@ namespace REPO.Core.Contract
         Task<T?> DeleteAsync(Guid id);
 
         Task<IEnumerable<T>> GetAllAsync(string[] includes = null);
+
+
+        Task<IEnumerable<T>> GetFilteredSortedPageAsync(string? filterOn, string? filterQuery,
+           string? sortBy, bool isAssending, string[]includes=null, int pageNumber = 1, int pageSize = 10);
+
+
+         Task<IEnumerable<T>> GetSortedPageAsync(string? sortBy, bool isAssending, string[] includes = null, int pageNumber = 1, int pageSize = 10);
+
+
+
         Task<T?> GetByIdAsync(Expression<Func<T, bool>> match, string[] includes = null);
 
         Task<IEnumerable<T>> GetFilteredAsync(Expression<Func<T, bool>> critiria ,string[] includes = null);

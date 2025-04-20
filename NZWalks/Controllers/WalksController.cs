@@ -21,15 +21,31 @@ namespace NZ.Walks.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAllOrderInPage(/*[FromQuery] string? filterOn,*/ /*[FromQuery] string? filterQuery,*/
+            [FromQuery] string? sortBy, [FromQuery]bool isAssending, [FromQuery]int pageNumber = 1, [FromQuery]int pageSize=10)
         {
-           IEnumerable<Walk> walks = await _unitOfWork.Walk.GetAllAsync(new[] { "Difficulty","Region" });
+           
 
-            List<WalkResponseDTO> responseDTO=_mapper.Map<List<WalkResponseDTO>>(walks);
-            
+            IEnumerable<Walk> walks = await _unitOfWork.Walk.GetSortedPageAsync(sortBy, isAssending, new[] { "Difficulty", "Region" }, pageNumber, pageSize);
 
+            List<WalkResponseDTO> responseDTO = _mapper.Map<List<WalkResponseDTO>>(walks);
             return Ok(responseDTO);
+
         }
+
+
+       [HttpGet("GetSortSilterPage")]
+       public async Task<ActionResult> GetAllOrder_SortedInPage([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
+          [FromQuery] string? sortBy, [FromQuery] bool isAssending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+       {
+      
+      
+           IEnumerable<Walk> walks = await _unitOfWork.Walk.GetFilteredSortedPageAsync(filterOn,filterQuery,sortBy, isAssending, null, pageNumber, pageSize);
+      
+           List<WalkResponseDTO> responseDTO = _mapper.Map<List<WalkResponseDTO>>(walks);
+           return Ok(responseDTO);
+      
+       }
 
 
         [HttpGet("{id:guid}")]
@@ -47,7 +63,6 @@ namespace NZ.Walks.Controllers
         } 
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Create([FromBody]WalkRequestDTO walkReqDTO) 
         {
             if (ModelState.IsValid)
@@ -68,7 +83,6 @@ namespace NZ.Walks.Controllers
 
 
         [HttpPut("{id:guid}")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult>Update(Guid id,WalkRequestDTO walkRequest)
         {
             Walk? walk = await _unitOfWork.Walk.GetByIdAsync(id);
@@ -100,7 +114,6 @@ namespace NZ.Walks.Controllers
 
 
         [HttpDelete("{id:guid}")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
             Walk? walk = await _unitOfWork.Walk.DeleteAsync(id);

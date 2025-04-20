@@ -297,3 +297,9 @@ E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\obj\Debug\net8.0\scopedcss\bundle\N
 E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\obj\Debug\net8.0\NZ.Walks.csproj.Up2Date
 E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\obj\Debug\net8.0\NZ.Walks.genruntimeconfig.cache
 E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\obj\Debug\net8.0\ref\NZ.Walks.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\bin\Debug\net8.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
+E:\3-.NET\9-Projects\NZWalks&Regions\NZWalks\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll

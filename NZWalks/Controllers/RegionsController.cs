@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using REPO.Core.Contract;
 using REPO.Core.DTO;
@@ -6,7 +7,8 @@ using REPO.Core.Models;
 
 namespace NZ.Walks.Controllers
 {
-    
+
+    [Authorize]
     public class RegionsController : BaseController
     {
         private readonly IUnitOfWork _unitofWork;

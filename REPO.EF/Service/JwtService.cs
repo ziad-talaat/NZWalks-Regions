@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using REPO.Core.Contract;
@@ -14,18 +15,22 @@ namespace REPO.EF.Service
     {
         private readonly JWTOptions _jwtOptions;
         private readonly IConfiguration _configuration;
-        public JwtService(IOptions<JWTOptions>jwt, IConfiguration config)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public JwtService(IOptions<JWTOptions>jwt, IConfiguration config, UserManager<ApplicationUser> userManager)
         {
             _jwtOptions = jwt.Value;
             _configuration = config;
+            _userManager = userManager;
         }
 
-        public AuthanticatedResponse CreateJwtToken(ApplicationUser user)
+        public async Task<AuthanticatedResponse> CreateJwtToken(ApplicationUser user)
         {
 
-            DateTime expire = DateTime.UtcNow.Date.AddMinutes(Convert.ToDouble(_jwtOptions.Expiration));
+            DateTime expire = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_jwtOptions.Expiration));
 
-            Claim[] claims = new Claim[]
+            var roles = await _userManager.GetRolesAsync(user);
+
+            List<Claim>claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -33,6 +38,11 @@ namespace REPO.EF.Service
                 new Claim(ClaimTypes.NameIdentifier, user.Email.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName.ToString()),
             };
+
+            foreach(var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var secret = _configuration.GetSection("jwt")["secretKey"];
             if (string.IsNullOrEmpty(secret))
@@ -66,6 +76,7 @@ namespace REPO.EF.Service
                 Token = token,
                 Email = user.Email,
                 Name = user.UserName,
+                ExpirationDate = expire
             };
 
         }

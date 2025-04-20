@@ -6,5 +6,6 @@ namespace NZ.Walks.Controllers
     public interface IUserRepository:IBaseRepository<ApplicationUser>
     {
         Task<ApplicationUser?> GetUserByEmail(string email);
+        Task<ApplicationUser?> GetUserByNormalizdName(string name);
     }
 }

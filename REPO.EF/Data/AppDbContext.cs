@@ -19,16 +19,10 @@ namespace REPO.EF.Data
         public DbSet<Difficulty> Difficulty { get; set; }
         public DbSet<Walk> Walks { get; set; }
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+        public DbSet<Image> Images { get; set; }
 
 
-      // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-      // {
-      //     if (!optionsBuilder.IsConfigured)
-      //     {
-      //         optionsBuilder.UseSqlServer( );
-      //       //  optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=NZWalksdb;Integrated Security=True;Trust Server Certificate=True");
-      //     }
-      // }
+     
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -100,6 +94,7 @@ namespace REPO.EF.Data
 
             var roleReaderId = Guid.NewGuid();
             var roleWriterId = Guid.NewGuid();
+            var roleAdminId = Guid.NewGuid();
             var roles = new List<IdentityRole>
             {
                 new IdentityRole
@@ -115,6 +110,14 @@ namespace REPO.EF.Data
                     ConcurrencyStamp=roleWriterId.ToString(),  // protect data integrity in edge cases (like concurrent updates via an admin panel),
                     Name="Writer",
                     NormalizedName="Writer".ToUpper() //Identity automatically uses NormalizedName when checking for roles or usernames.
+                },
+
+                new IdentityRole
+                {
+                    Id=roleAdminId.ToString(),
+                    ConcurrencyStamp=roleAdminId.ToString(),
+                    Name="Admin",
+                    NormalizedName="Admin".ToUpper()
                 },
             };
             modelBuilder.Entity<IdentityRole>().HasData(roles);

@@ -1,5 +1,31 @@
 [
   {
+    "ContainingType": "NZ.Walks.Controllers.ImageController",
+    "Method": "UploadImage",
+    "RelativePath": "api/Image/Upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "NZ.Walks.Controllers.RegionsController",
     "Method": "GetAll",
     "RelativePath": "api/Regions",
@@ -73,6 +99,22 @@
       {
         "Name": "id",
         "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.UserController",
+    "Method": "AssignUserToRole",
+    "RelativePath": "api/User/assignToRole",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "assignDTO",
+        "Type": "REPO.Core.DTO.AssignToRole",
         "IsRequired": true
       }
     ],

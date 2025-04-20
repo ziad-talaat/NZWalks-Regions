@@ -12,6 +12,7 @@ namespace REPO.Core.Contract
     {
         IBaseRepository<Region> Region { get; }
         IBaseRepository<Walk> Walk { get; }
+        IBaseRepository<Image> Image { get; }
         IUserRepository AppUser { get; }
         
         Task CompleteAsync();

@@ -51,17 +51,24 @@ namespace REPO.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fbd09092-25ab-49b6-bffb-4fa7e04b47d2",
-                            ConcurrencyStamp = "fbd09092-25ab-49b6-bffb-4fa7e04b47d2",
+                            Id = "4e5b4ebf-9288-42ae-af6f-9e7590da898b",
+                            ConcurrencyStamp = "4e5b4ebf-9288-42ae-af6f-9e7590da898b",
                             Name = "Reader",
                             NormalizedName = "READER"
                         },
                         new
                         {
-                            Id = "e932632e-d330-458a-96a5-08ee7fa0a9d5",
-                            ConcurrencyStamp = "e932632e-d330-458a-96a5-08ee7fa0a9d5",
+                            Id = "e71411ad-6f8e-4583-b8db-0583d9ab74f8",
+                            ConcurrencyStamp = "e71411ad-6f8e-4583-b8db-0583d9ab74f8",
                             Name = "Writer",
                             NormalizedName = "WRITER"
+                        },
+                        new
+                        {
+                            Id = "3a5df88b-311e-4a78-b3fd-a2d1ac43b768",
+                            ConcurrencyStamp = "3a5df88b-311e-4a78-b3fd-a2d1ac43b768",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         });
                 });
 
@@ -280,6 +287,35 @@ namespace REPO.EF.Migrations
                             Id = 3,
                             Name = "Hard"
                         });
+                });
+
+            modelBuilder.Entity("REPO.Core.Models.Image", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FileDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("FileSizeInBytes")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("REPO.Core.Models.Region", b =>

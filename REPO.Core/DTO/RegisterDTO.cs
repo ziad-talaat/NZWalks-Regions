@@ -22,9 +22,11 @@ namespace REPO.Core.DTO
 
         [Required]
         [MaxLength(100)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required]
         [Compare("Password", ErrorMessage = "Passwords do not match")]
+        [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
         

@@ -20,5 +20,10 @@ namespace REPO.EF.Repositories
         {
           return await  _context.ApplicationUser.FirstOrDefaultAsync(x=>x.Email== email);
         }
+
+        public async Task<ApplicationUser?> GetUserByNormalizdName(string name)
+        {
+            return await _context.ApplicationUser.FirstOrDefaultAsync(x => x.NormalizedUserName == name.ToUpper());
+        }
     }
 }

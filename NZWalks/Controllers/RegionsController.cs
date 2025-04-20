@@ -4,36 +4,34 @@ using Microsoft.AspNetCore.Mvc;
 using REPO.Core.Contract;
 using REPO.Core.DTO;
 using REPO.Core.Models;
+using System.Text.Json;
 
 namespace NZ.Walks.Controllers
 {
 
-    [Authorize]
+   // [Authorize]
     public class RegionsController : BaseController
     {
         private readonly IUnitOfWork _unitofWork;
         private readonly IMapper _mapper;
-        public RegionsController(IUnitOfWork unitofWork,IMapper mapper)
+        private readonly ILogger<RegionsController> _logger;
+        public RegionsController(IUnitOfWork unitofWork,IMapper mapper, ILogger<RegionsController> logger)
         {
             _unitofWork = unitofWork;
-            _mapper = mapper;   
+            _mapper = mapper;  
+            _logger=logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+
             IEnumerable<Region> regions = await _unitofWork.Region.GetAllAsync();
             //IEnumerable<RegionDTO> regionsDTOList = Helper.ConvertToRegionsDTO(regions.ToList());
-
             var regionsDTOList=_mapper.Map<List<RegionDTO>>(regions);
 
             return Ok(regionsDTOList);
-
-
-          
         }
-
-
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)

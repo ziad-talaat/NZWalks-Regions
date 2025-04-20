@@ -10,6 +10,6 @@ namespace REPO.Core.Contract
 {
     public interface IJwtService
     {
-        AuthanticatedResponse CreateJwtToken(ApplicationUser user);
+        Task<AuthanticatedResponse> CreateJwtToken(ApplicationUser user);
     }
 }

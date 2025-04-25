@@ -21,5 +21,6 @@ namespace REPO.Core.Models
         public string RegionImageURL{ get; set; }
 
         public ICollection<Walk> Walks { get; set; }=new List<Walk>();  
+        public ICollection<Image> Images { get; set; }=new List<Image>();  
     }
 }

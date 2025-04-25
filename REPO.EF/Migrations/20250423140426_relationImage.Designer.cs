@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using REPO.EF.Data;
 
@@ -11,9 +12,11 @@ using REPO.EF.Data;
 namespace REPO.EF.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423140426_relationImage")]
+    partial class relationImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,22 +54,22 @@ namespace REPO.EF.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6300d7b0-28cd-45c3-968b-fc714db887af",
-                            ConcurrencyStamp = "6300d7b0-28cd-45c3-968b-fc714db887af",
+                            Id = "612b87f4-c9b8-4e00-b8fd-7026f67b1c63",
+                            ConcurrencyStamp = "612b87f4-c9b8-4e00-b8fd-7026f67b1c63",
                             Name = "Reader",
                             NormalizedName = "READER"
                         },
                         new
                         {
-                            Id = "3f80d06d-19c9-4cdd-8485-0730827cab35",
-                            ConcurrencyStamp = "3f80d06d-19c9-4cdd-8485-0730827cab35",
+                            Id = "67fc26a5-16fe-4fc7-a2e6-78c1c45d785c",
+                            ConcurrencyStamp = "67fc26a5-16fe-4fc7-a2e6-78c1c45d785c",
                             Name = "Writer",
                             NormalizedName = "WRITER"
                         },
                         new
                         {
-                            Id = "0376d158-3763-4867-9bd8-a5c4527083a9",
-                            ConcurrencyStamp = "0376d158-3763-4867-9bd8-a5c4527083a9",
+                            Id = "d9083a1b-19e1-4f28-82fd-c1479e52e788",
+                            ConcurrencyStamp = "d9083a1b-19e1-4f28-82fd-c1479e52e788",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -293,8 +296,7 @@ namespace REPO.EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FileDescription")
                         .HasColumnType("nvarchar(max)");
@@ -314,10 +316,10 @@ namespace REPO.EF.Migrations
                     b.Property<long>("FileSizeInBytes")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid?>("RegionId")
+                    b.Property<Guid>("RegionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("WalkId")
+                    b.Property<Guid>("WalkId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -333,8 +335,7 @@ namespace REPO.EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -383,8 +384,7 @@ namespace REPO.EF.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -476,12 +476,14 @@ namespace REPO.EF.Migrations
                         .WithMany("Images")
                         .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired()
                         .HasConstraintName("FK_Images_Regions_RegionId");
 
                     b.HasOne("REPO.Core.Models.Walk", "Walk")
                         .WithMany("Images")
                         .HasForeignKey("WalkId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired()
                         .HasConstraintName("FK_Images_Walks_WalkId");
 
                     b.Navigation("Region");

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using System.Data;
 
 namespace NZ.Walks.Controllers
 {
-   
+    [Authorize]
     public class WalksController : BaseController
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -33,11 +33,39 @@ namespace REPO.EF.Data
              .HasIndex(u => u.Email)
              .IsUnique();
 
+
+            modelBuilder.Entity<Walk>().Property(x => x.Name).IsRequired(true);
+            modelBuilder.Entity<Walk>()
+                  .Property(x => x.Id)
+                 .HasDefaultValueSql("NEWSEQUENTIALID()");
+
+            modelBuilder.Entity<Region>().Property(x => x.Name).IsRequired(true);
+
+            modelBuilder.Entity<Region>()
+               .Property(x => x.Id)
+               .HasDefaultValueSql("NEWSEQUENTIALID()");
+            modelBuilder.Entity<Image>()
+              .Property(x => x.Id)
+              .HasDefaultValueSql("NEWSEQUENTIALID()");
+
             modelBuilder.Entity<ApplicationUser>()
                 .HasIndex(u => u.UserName)
                 .IsUnique();
 
 
+            modelBuilder.Entity<Image>()
+                .HasOne(x => x.Region)
+                .WithMany(x => x.Images)
+                .HasForeignKey(x => x.RegionId)
+                .HasConstraintName("FK_Images_Regions_RegionId")
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Image>()
+                .HasOne(x => x.Walk)
+                .WithMany(x => x.Images)
+                .HasForeignKey(x => x.WalkId)
+                .HasConstraintName("FK_Images_Walks_WalkId")
+                .OnDelete(DeleteBehavior.Restrict);
 
 
 

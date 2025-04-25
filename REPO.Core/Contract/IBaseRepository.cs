@@ -1,4 +1,5 @@
 ﻿
+using REPO.Core.DTO;
 using System.Linq.Expressions;
 namespace REPO.Core.Contract
 {
@@ -9,8 +10,12 @@ namespace REPO.Core.Contract
         Task CeateAsync(T item);
         Task UpdateAsync(T item);
         Task<T?> DeleteAsync(Guid id);
-
+         Task<T?> GetOne(Expression<Func<T, bool>> item);
         Task<IEnumerable<T>> GetAllAsync(string[] includes = null);
+        Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T,bool>>filter,Expression<Func<T,TResult>> selection);
+
+        
+
 
 
         Task<IEnumerable<T>> GetFilteredSortedPageAsync(string? filterOn, string? filterQuery,

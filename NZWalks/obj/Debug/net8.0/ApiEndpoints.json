@@ -1,8 +1,50 @@
 [
   {
     "ContainingType": "NZ.Walks.Controllers.ImageController",
+    "Method": "GetAllImages",
+    "RelativePath": "api/Image",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.ImageController",
+    "Method": "DeleteImage",
+    "RelativePath": "api/Image",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.ImageController",
+    "Method": "GetImage",
+    "RelativePath": "api/Image/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.ImageController",
     "Method": "UploadImage",
-    "RelativePath": "api/Image/Upload",
+    "RelativePath": "api/Image/upload",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -21,6 +63,32 @@
         "Name": "FileDescription",
         "Type": "System.String",
         "IsRequired": false
+      },
+      {
+        "Name": "WalkId",
+        "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "RegionId",
+        "Type": "System.Nullable\u00601[[System.Guid, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.ImageController",
+    "Method": "GetAllIn",
+    "RelativePath": "api/Image/WalkName/{walkName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "walkName",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

@@ -52,6 +52,12 @@ namespace REPO.EF.Repositories
             return item;
         }
 
+        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T,bool>> filter, Expression<Func<T, TResult>> selection)
+        {
+            return await _context.Set<T>().Where(filter).Select(selection).ToListAsync();
+        }
+
+
         public async Task<IEnumerable<T>> GetAllAsync(string[] includes = null)
         {
             IQueryable<T> query=_context.Set<T>();
@@ -116,9 +122,13 @@ namespace REPO.EF.Repositories
             return await query.Where(critiria).ToListAsync();
         }
 
+
+        public async Task<T?> GetOne(Expression<Func<T, bool>> item)
+        {
+           return await _context.Set<T>().FirstOrDefaultAsync(item)??null;
+        }
+
        
-
-
 
 
 
@@ -294,6 +304,7 @@ namespace REPO.EF.Repositories
 
             return query;
         }
-    
+
+       
     }
 }

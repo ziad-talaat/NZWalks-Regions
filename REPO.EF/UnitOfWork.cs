@@ -17,10 +17,10 @@ namespace REPO.EF
         public IBaseRepository<Region> Region { get;private set; }
 
         public IBaseRepository<Walk> Walk { get;private set; }
-        public IBaseRepository<Image> Image { get;private set; }
 
         public IUserRepository AppUser { get; private set; }
 
+        public IIMageRepository Image { get; private set; }
 
         public UnitOfWork(AppDbContext context)
         {
@@ -28,7 +28,7 @@ namespace REPO.EF
             Region = new BaseRepository<Region>(_context);
             Walk= new BaseRepository<Walk>(_context);
             AppUser = new UserRepository(_context);
-            Image = new BaseRepository<Image>(_context);
+            Image = new ImageRepository(_context);
         }
 
 

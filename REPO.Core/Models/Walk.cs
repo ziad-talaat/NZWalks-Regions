@@ -30,6 +30,8 @@ namespace REPO.Core.Models
         public Region Region { get; set; }
         [ForeignKey(nameof(Walk.DifficultyId))]
         public Difficulty Difficulty { get; set; }
+
+        public ICollection<Image> Images { get; set; } = new List<Image>();
     }
 }
         

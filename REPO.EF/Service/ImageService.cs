@@ -33,7 +33,7 @@ namespace REPO.EF.Service
         public async Task<Image> Upload(Image image)
 
 
-        {     //This gets the root directory of the application. It refers to the base directory where your application is running and compine with Images and then filename and fileExtension
+        {     //This gets the root directory of the application. It refers to the base directory where your application is running and compine with Images and then filename and fileExtension     ,,,,,   _webHostEnvironment.ContentRootPath=> gets the floder path of the base project here
               // ex) C:\path\to\app\Images\image.jpg
             var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{image.FileName}{image.FileExtension}");
 
@@ -46,13 +46,12 @@ namespace REPO.EF.Service
             await image.File.CopyToAsync(stream); // write in the stream ('stream' that has the path where will write and write optionn)
 
 
-            //https://localhost2230/images/image.jpg
 
-            var urlFilePath = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}{_httpContextAccessor.HttpContext.Request.PathBase}/Images/{image.FileName}{image.FileExtension}";
+            var urlFilePath = $"{_httpContextAccessor.HttpContext?.Request.Scheme}://{_httpContextAccessor.HttpContext?.Request.Host}{_httpContextAccessor.HttpContext?.Request.PathBase}/Images/{image.FileName}{image.FileExtension}";
             image.FilePath = urlFilePath;
 
-            await _unitOfWork.Image.CeateAsync(image);
-            await _unitOfWork.CompleteAsync();
+          //  await _unitOfWork.Image.CeateAsync(image);
+          //  await _unitOfWork.CompleteAsync();
             return image;
         }
     }

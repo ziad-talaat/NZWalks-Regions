@@ -9,7 +9,7 @@ using System.Text.Json;
 namespace NZ.Walks.Controllers
 {
 
-   // [Authorize]
+    [Authorize]
     public class RegionsController : BaseController
     {
         private readonly IUnitOfWork _unitofWork;

@@ -1,4 +1,4 @@
-# 🥾 New Zealand Walks & Regions App
+# 🥾 Egypt Walks & Regions App
 
 A  web application to explore the best walking tracks and stunning regions across New Zealand.
 

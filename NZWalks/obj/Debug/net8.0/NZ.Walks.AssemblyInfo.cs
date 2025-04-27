@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NZ.Walks")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2b2c48e46f70eaa9db7d830f484e5e47e80c2315")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32c26d846e50f49c3e55bf91ee40ae40277b0134")]
 [assembly: System.Reflection.AssemblyProductAttribute("NZ.Walks")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NZ.Walks")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

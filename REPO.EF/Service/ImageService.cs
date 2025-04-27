@@ -2,14 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using REPO.Core.Contract;
 using REPO.Core.Models;
-using REPO.EF.Data;
-using REPO.EF.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace REPO.EF.Service
 {
@@ -31,9 +24,9 @@ namespace REPO.EF.Service
 
       
         public async Task<Image> Upload(Image image)
+        { 
 
-
-        {     //This gets the root directory of the application. It refers to the base directory where your application is running and compine with Images and then filename and fileExtension     ,,,,,   _webHostEnvironment.ContentRootPath=> gets the floder path of the base project here
+            //This gets the root directory of the application. It refers to the base directory where your application is running and compine with Images and then filename and fileExtension     ,,,,,   _webHostEnvironment.ContentRootPath=> gets the floder path of the base project here
               // ex) C:\path\to\app\Images\image.jpg
             var localFilePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images", $"{image.FileName}{image.FileExtension}");
 
@@ -50,9 +43,13 @@ namespace REPO.EF.Service
             var urlFilePath = $"{_httpContextAccessor.HttpContext?.Request.Scheme}://{_httpContextAccessor.HttpContext?.Request.Host}{_httpContextAccessor.HttpContext?.Request.PathBase}/Images/{image.FileName}{image.FileExtension}";
             image.FilePath = urlFilePath;
 
-          //  await _unitOfWork.Image.CeateAsync(image);
-          //  await _unitOfWork.CompleteAsync();
+          
             return image;
+        }
+        public string GetfilePath(string fileName, string fileExtension)
+        {
+            return $"{_httpContextAccessor.HttpContext?.Request.Scheme}://{_httpContextAccessor.HttpContext?.Request.Host}{_httpContextAccessor.HttpContext?.Request.PathBase}/Images/{fileName}{fileExtension}";
+
         }
     }
 }

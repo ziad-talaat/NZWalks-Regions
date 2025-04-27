@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using REPO.Core.Contract;
+using REPO.Core.Models;
 using REPO.EF.Data;
 using System.Globalization;
 using System.Linq.Expressions;
@@ -17,11 +18,11 @@ namespace REPO.EF.Repositories
         protected readonly AppDbContext _context;
         public BaseRepository()
         {
-            
+
         }
         public BaseRepository(AppDbContext context)
         {
-            _context = context; 
+            _context = context;
         }
         public async Task<IEnumerable<T>> GetAllAsync()
         {
@@ -30,12 +31,12 @@ namespace REPO.EF.Repositories
 
         public async Task<T?> GetByIdAsync(Guid id)
         {
-           return  await _context.Set<T>().FindAsync(id);
+            return await _context.Set<T>().FindAsync(id);
         }
 
         public async Task CeateAsync(T item)
         {
-           await _context.Set<T>().AddAsync(item);
+            await _context.Set<T>().AddAsync(item);
         }
         public async Task UpdateAsync(T item)
         {
@@ -44,7 +45,7 @@ namespace REPO.EF.Repositories
 
         public async Task<T> DeleteAsync(Guid id)
         {
-            T? item =await  GetByIdAsync(id);
+            T? item = await GetByIdAsync(id);
             if (item == null)
                 return null;
 
@@ -52,7 +53,7 @@ namespace REPO.EF.Repositories
             return item;
         }
 
-        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T,bool>> filter, Expression<Func<T, TResult>> selection)
+        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(Expression<Func<T, bool>> filter, Expression<Func<T, TResult>> selection)
         {
             return await _context.Set<T>().Where(filter).Select(selection).ToListAsync();
         }
@@ -60,24 +61,24 @@ namespace REPO.EF.Repositories
 
         public async Task<IEnumerable<T>> GetAllAsync(string[] includes = null)
         {
-            IQueryable<T> query=_context.Set<T>();
-            if(includes == null)
+            IQueryable<T> query = _context.Set<T>();
+            if (includes == null)
             {
                 return await query.ToListAsync();
             }
 
-            foreach(string incluse in includes)
+            foreach (string incluse in includes)
             {
-                query=query.Include(incluse);
+                query = query.Include(incluse);
             }
             return await query.ToListAsync();
 
         }
 
-        public async Task<T?> GetByIdAsync(Expression<Func<T,bool>>match,string[] includes = null)
+        public async Task<T?> GetByIdAsync(Expression<Func<T, bool>> match, string[] includes = null)
         {
-           IQueryable<T?>query=_context.Set<T>();    
-            if(includes!= null)
+            IQueryable<T?> query = _context.Set<T>();
+            if (includes != null)
             {
                 foreach (var include in includes)
                 {
@@ -88,11 +89,11 @@ namespace REPO.EF.Repositories
             return await query.FirstOrDefaultAsync(match);
         }
 
-        
-            
-        public async Task<IEnumerable<T>> GetFiltered_OrderedAsync(Expression<Func<T, bool>> critiria,Expression<Func<T,object>>orderUsing, string[] includes = null, bool isAssending=true)
+
+
+        public async Task<IEnumerable<T>> GetFiltered_OrderedAsync(Expression<Func<T, bool>> critiria, Expression<Func<T, object>> orderUsing, string[] includes = null, bool isAssending = true)
         {
-            IQueryable<T>query=_context.Set<T>();
+            IQueryable<T> query = _context.Set<T>();
             if (includes != null)
             {
                 foreach (var include in includes)
@@ -125,30 +126,14 @@ namespace REPO.EF.Repositories
 
         public async Task<T?> GetOne(Expression<Func<T, bool>> item)
         {
-           return await _context.Set<T>().FirstOrDefaultAsync(item)??null;
+            return await _context.Set<T>().FirstOrDefaultAsync(item) ?? null;
         }
 
-       
 
 
 
-        public async Task<IEnumerable<T>> GetFilteredAsyncUsingReflecton( string filterProperty,string filterValue, string[] includes = null)
-        {
-            IQueryable<T> query = _context.Set<T>();
-            if (includes != null)
-            {
-                foreach (var include in includes)
-                {
-                    query = query.Include(include);
-                }
-            }
-        
-            query=BuildFilter(query,filterProperty, filterValue);
-           
-            return await query.ToListAsync();
-        }
 
-       public async Task<IEnumerable<T>> GetFiltered_OrderedAsyncUsingReflecton(string filterProperty, string filterValue, string orderProperty, string[] includes = null,  bool IsAssending = true )
+        public async Task<IEnumerable<T>> GetFilteredAsyncUsingReflecton(string filterProperty, string filterValue, string[] includes = null)
         {
             IQueryable<T> query = _context.Set<T>();
             if (includes != null)
@@ -159,17 +144,12 @@ namespace REPO.EF.Repositories
                 }
             }
 
-           query=BuildFilter(query,filterProperty,filterValue);
-
-
-
-          query=BuildSort(query,orderProperty, IsAssending);
-
+            query = BuildFilter(query, filterProperty, filterValue);
 
             return await query.ToListAsync();
         }
 
-        public  async Task<IEnumerable<T>> GetOrderedBy(string orderUsing, string[] includes = null, bool isAssending = true)
+        public async Task<IEnumerable<T>> GetFiltered_OrderedAsyncUsingReflecton(string filterProperty, string filterValue, string orderProperty, string[] includes = null, bool IsAssending = true)
         {
             IQueryable<T> query = _context.Set<T>();
             if (includes != null)
@@ -180,7 +160,28 @@ namespace REPO.EF.Repositories
                 }
             }
 
-            query = BuildSort(query,orderUsing,isAssending);
+            query = BuildFilter(query, filterProperty, filterValue);
+
+
+
+            query = BuildSort(query, orderProperty, IsAssending);
+
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> GetOrderedBy(string orderUsing, string[] includes = null, bool isAssending = true)
+        {
+            IQueryable<T> query = _context.Set<T>();
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            query = BuildSort(query, orderUsing, isAssending);
 
 
             return await query.ToListAsync();
@@ -200,11 +201,11 @@ namespace REPO.EF.Repositories
                 query = query.Include(include);
             }
 
-            query=  BuildFilter(query, filterOn, filterQuery);
+            query = BuildFilter(query, filterOn, filterQuery);
 
 
 
-             query =BuildSort(query,sortBy,isAssending);    
+            query = BuildSort(query, sortBy, isAssending);
 
 
             int skip = (pageNumber - 1) * pageSize;
@@ -222,27 +223,34 @@ namespace REPO.EF.Repositories
         {
 
             IQueryable<T> query = _context.Set<T>();
-          
-            includes??=Array.Empty<string>();   
 
-                foreach (var include in includes)
-                {
-                    query = query.Include(include);
-                }
-            int skip = (pageNumber -1) *pageSize;
+            includes ??= Array.Empty<string>();
 
-            query = query.Skip(skip).Take(pageSize);
-
-           query= BuildSort(query, sortBy, isAssending);
-
-            return await query.ToListAsync();
-
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+             int skip = (pageNumber - 1) * pageSize;
+           
+             query = query.Skip(skip).Take(pageSize);
+           
+             query = BuildSort(query, sortBy, isAssending);
+           
+             return await query.ToListAsync();
         }
 
 
 
 
-        private IQueryable<T> BuildSort(IQueryable<T> query,string? sortBy, bool isAssending = true)
+
+
+            
+
+
+
+
+
+        private IQueryable<T> BuildSort(IQueryable<T> query, string? sortBy, bool isAssending = true)
         {
             if (!string.IsNullOrEmpty(sortBy))
             {
@@ -266,18 +274,22 @@ namespace REPO.EF.Repositories
                     typeof(Queryable), //class that contains the method
                     methodName,    //the method to call
                     new Type[] { typeof(T), propertyType }, //  These are the generic types for the   OrderBy<T, TKey>.
-                    query.Expression,  //The current state of the query before ordering.
-                    Expression.Quote(lambda)//Wraps the lambda as an expression tree for LINQ to interpret.
+                    query.Expression,  //the base query  ex->  _context.User
+
+                    Expression.Quote(lambda)//wraps the lambda so that it is treated as a query expression, not executable code.
                     );
-
-
-
                 query = query.Provider.CreateQuery<T>(result);  //This actually executes the expression tree and creates a new `IQueryable<T>` that includes the ordering you just dynamically added.
                                                                 // `CreateQuery < T >` tells EF Core to **build the final LINQ query** using your custom-built expression.
             }
             return query;
         }
-        private IQueryable<T> BuildFilter(IQueryable<T> query, string? filterOn, string? filterQuery) 
+
+
+
+
+
+
+        private IQueryable<T> BuildFilter(IQueryable<T> query, string? filterOn, string? filterQuery)
         {
             if (!string.IsNullOrEmpty(filterOn) && filterQuery != null)
             {
@@ -303,8 +315,11 @@ namespace REPO.EF.Repositories
             }
 
             return query;
-        }
 
-       
+
+
+
+
+        }
     }
 }

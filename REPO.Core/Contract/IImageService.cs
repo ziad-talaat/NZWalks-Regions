@@ -10,5 +10,6 @@ namespace REPO.Core.Contract
     public interface IImageService
     {
         Task<Image> Upload(Image image);
+         string GetfilePath(string fileName, string fileExtension);
     }
 }

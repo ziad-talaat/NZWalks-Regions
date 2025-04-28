@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace REPO.Core.DTO
 {
-    public class UpdateImageRequestDTO
+    public  class UpdateImageRequestDTO
     {
         public IFormFile File { get; set; }
         [Required(ErrorMessage = "File name is required.")]
@@ -30,20 +31,32 @@ namespace REPO.Core.DTO
 
 
 
-        public static Image ConvertToImage(UpdateImageRequestDTO request)
-        {
-            return new Image
-            {
-                File = request.File,
-                FileName = request.FileName,
-                FileDescription = request.FileDescription,
-                FileExtension = Path.GetExtension(request.File.FileName),
-                FileSizeInBytes = request.File.Length,
-                WalkId = request.WalkId,
-                RegionId = request.RegionId,
-            };
-        }
+      
 
+    }
+
+    public static class ImageConvertor
+    {
+        public static void ConvertToImage(this Image image,UpdateImageRequestDTO request)
+        {
+
+            image.File = request.File;
+            image.FileName = request.FileName;
+            image.FileDescription = request.FileDescription;
+            image.FileExtension = Path.GetExtension(request.File.FileName);
+            image.FileSizeInBytes = request.File.Length;
+
+            if (request.WalkId != null)
+            {
+                image.WalkId = request.WalkId;
+            }
+
+            if (request.RegionId != null)
+            {
+            image.RegionId = request.RegionId;
+            }
+            
+        }
     }
 
 }

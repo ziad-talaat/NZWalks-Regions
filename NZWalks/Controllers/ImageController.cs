@@ -97,27 +97,45 @@ namespace NZ.Walks.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateImage(Guid id, UpdateImageRequestDTO request)
         {
-            Region? region = await _unitOfWork.Region.GetByIdAsync(request.RegionId??Guid.Empty);
-            Walk? walk = await _unitOfWork.Walk.GetByIdAsync(request.WalkId??Guid.Empty);
-            if(region ==null || walk == null)
-                  return BadRequest("no such region or walk");
+
+            if (!string.IsNullOrEmpty(request.RegionId.ToString()))
+            {
+                Region? region = await _unitOfWork.Region.GetByIdAsync(request.RegionId ?? Guid.Empty);
+                if (region == null)
+                    return BadRequest("no such region ");
+            }
+            if (!string.IsNullOrEmpty(request.WalkId.ToString()))
+            {
+                Walk? walk = await _unitOfWork.Walk.GetByIdAsync(request.WalkId ?? Guid.Empty);
+                if ( walk == null)
+                    return BadRequest("no such  walk");
+            }
+           
 
             if (ModelState.IsValid)
             {
+                using var transaction = await _unitOfWork.Image.BeginTransactionAsync();
                 try
                 {
                     Image? image = await _unitOfWork.Image.GetByIdAsync(id);
                     if (image == null)
                         return NotFound("No such Image");
 
-                    image = UpdateImageRequestDTO.ConvertToImage(request);
+                    image.ConvertToImage(request);
+
                     image.FilePath = _imageService.GetfilePath(image.FileName, Path.GetExtension(image.File.FileName));
+
+                   
+                    await _imageService.Upload(image);
+                    await _unitOfWork.Image.UpdateAsync(image);
                     await _unitOfWork.CompleteAsync();
+                    await transaction.CommitAsync();
                     return Ok("Done");
                 }
-                catch (DbUpdateException)
+                catch (DbUpdateException ex)
                 {
-                    return BadRequest("there an error");
+                    await transaction.RollbackAsync();  
+                    return BadRequest($"there an error:{ex.Message}");
                 }
 
             }

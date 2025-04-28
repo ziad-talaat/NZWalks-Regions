@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.EntityFrameworkCore.Storage;
 using REPO.Core.DTO;
 using System.Linq.Expressions;
 namespace REPO.Core.Contract
@@ -37,7 +38,9 @@ namespace REPO.Core.Contract
 
 
 
-       Task<IEnumerable<T>> GetFilteredAsyncUsingReflecton(string filterProperty, string filterValue, string[] includes = null);
+        Task<IDbContextTransaction> BeginTransactionAsync();
+
+        Task<IEnumerable<T>> GetFilteredAsyncUsingReflecton(string filterProperty, string filterValue, string[] includes = null);
         Task<IEnumerable<T>> GetFiltered_OrderedAsyncUsingReflecton(string filterProperty, string filterValue, string orderProperty, string[] includes = null, bool IsAssending = true);
     }
 }

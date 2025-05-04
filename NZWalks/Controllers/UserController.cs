@@ -8,6 +8,7 @@ using REPO.Core.Contract;
 using REPO.Core.DTO;
 using REPO.Core.Models;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 
 namespace NZ.Walks.Controllers
 {
@@ -66,7 +67,10 @@ namespace NZ.Walks.Controllers
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, Roles.Reader);
-                    var authResponse = await _jwtService.CreateJwtToken(user);
+                    var authResponse = await  _jwtService.CreateJwtToken(user);
+                    user.RefrehToken = authResponse.RefreshToken;
+                    user.ExpirationRefreshToken = authResponse.RF_Expiration;
+                    await _userManager.UpdateAsync(user);
                     return Ok(authResponse);
                 }
 
@@ -110,7 +114,10 @@ namespace NZ.Walks.Controllers
 
             if (result.Succeeded)
             {
-                var authReponse =await  _jwtService.CreateJwtToken(user);
+                var authReponse =  await _jwtService.CreateJwtToken(user);
+                user.RefrehToken = authReponse.RefreshToken;
+                user.ExpirationRefreshToken = authReponse.RF_Expiration;
+                await _userManager.UpdateAsync(user);
                 return Ok(authReponse);
             }
             return BadRequest("password not correct or other error.");
@@ -161,8 +168,32 @@ namespace NZ.Walks.Controllers
             }
             return BadRequest(result.Errors.Select(e => e.Description));
         }
-    
 
+
+
+        [HttpPost("generate-RefreshToken")]
+        public async Task<IActionResult> GenerateRefreshToken(TokenModel model)
+        {
+            if (model == null)
+                return BadRequest("");
+
+            ClaimsPrincipal? principle = _jwtService.GetPrinciplesFromJWTToken(model.Token);
+            if (principle == null)
+                return BadRequest("");
+
+            string? id = principle.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            ApplicationUser? user =await _userManager.FindByIdAsync(id);
+            if (user == null || user.RefrehToken != model.RefreshToken || user.ExpirationRefreshToken < DateTime.Now)
+                return BadRequest("invalid operation");
+
+            AuthanticatedResponse auth =  await _jwtService.CreateJwtToken(user);
+            user.RefrehToken = auth.RefreshToken;
+            user.ExpirationRefreshToken = auth.RF_Expiration;
+            await _userManager.UpdateAsync(user);
+
+            return Ok(auth);
+        }
 
      
     }

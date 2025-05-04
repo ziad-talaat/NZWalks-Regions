@@ -5080,11 +5080,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\NZWalks\\NZ.Walks.csproj",
+      "projectUniqueName": "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\NZWalks\\NZ.Walks.csproj",
       "projectName": "NZ.Walks",
-      "projectPath": "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\NZWalks\\NZ.Walks.csproj",
+      "projectPath": "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\NZWalks\\NZ.Walks.csproj",
       "packagesPath": "C:\\Users\\Zeyad\\.nuget\\packages\\",
-      "outputPath": "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\NZWalks\\obj\\",
+      "outputPath": "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\NZWalks\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Zeyad\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5102,8 +5102,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\REPO.EF\\REPO.EF.csproj": {
-              "projectPath": "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\REPO.EF\\REPO.EF.csproj"
+            "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\REPO.EF\\REPO.EF.csproj": {
+              "projectPath": "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\REPO.EF\\REPO.EF.csproj"
             }
           }
         }

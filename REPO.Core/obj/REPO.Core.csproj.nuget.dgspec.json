@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\REPO.Core\\REPO.Core.csproj": {}
+    "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\REPO.Core\\REPO.Core.csproj": {}
   },
   "projects": {
-    "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\REPO.Core\\REPO.Core.csproj": {
+    "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\REPO.Core\\REPO.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\REPO.Core\\REPO.Core.csproj",
+        "projectUniqueName": "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\REPO.Core\\REPO.Core.csproj",
         "projectName": "REPO.Core",
-        "projectPath": "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\REPO.Core\\REPO.Core.csproj",
+        "projectPath": "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\REPO.Core\\REPO.Core.csproj",
         "packagesPath": "C:\\Users\\Zeyad\\.nuget\\packages\\",
-        "outputPath": "E:\\3-.NET\\9-Projects\\NZWalks&Regions\\REPO.Core\\obj\\",
+        "outputPath": "E:\\3-.NET\\9-Projects\\2-NZWalks&Regions\\REPO.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Zeyad\\AppData\\Roaming\\NuGet\\NuGet.Config",

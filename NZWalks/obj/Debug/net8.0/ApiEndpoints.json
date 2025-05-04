@@ -247,6 +247,22 @@
   },
   {
     "ContainingType": "NZ.Walks.Controllers.UserController",
+    "Method": "GenerateRefreshToken",
+    "RelativePath": "api/User/generate-RefreshToken",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "REPO.Core.DTO.TokenModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NZ.Walks.Controllers.UserController",
     "Method": "Login",
     "RelativePath": "api/User/login",
     "HttpMethod": "POST",

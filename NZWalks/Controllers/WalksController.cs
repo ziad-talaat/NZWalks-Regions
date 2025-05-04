@@ -22,8 +22,9 @@ namespace NZ.Walks.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        public async Task<ActionResult> GetAllOrderInPage(/*[FromQuery] string? filterOn,*/ /*[FromQuery] string? filterQuery,*/
-            [FromQuery] string? sortBy, [FromQuery]bool isAssending, [FromQuery]int pageNumber = 1, [FromQuery]int pageSize=10)
+        public async Task<ActionResult> GetAllOrderInPage([FromQuery] string? sortBy, [FromQuery] bool isAssending,
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+
         {
            
 

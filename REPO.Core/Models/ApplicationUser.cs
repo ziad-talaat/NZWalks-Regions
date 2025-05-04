@@ -10,5 +10,7 @@ namespace REPO.Core.Models
     public class ApplicationUser:IdentityUser
     {
         public string? Address { get; set; }
+        public string? RefrehToken { get; set; }
+        public DateTime? ExpirationRefreshToken { get; set; }
     }
 }

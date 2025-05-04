@@ -52,7 +52,6 @@ namespace NZ.Walks.Controllers
 
 
         [HttpPost]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Create([FromBody] RegionDTO regionDTO)
         {
             if (ModelState.IsValid)
@@ -77,7 +76,6 @@ namespace NZ.Walks.Controllers
 
 
         [HttpPut("{id:guid}")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Upadte(Guid id, [FromBody] UpdateRegionRequestDTO UpdateregionDTO)
         {
             Region? region = await _unitofWork.Region.GetByIdAsync(id);
@@ -106,7 +104,6 @@ namespace NZ.Walks.Controllers
 
 
         [HttpDelete("{id:guid}")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
               Region? region= await _unitofWork.Region.DeleteAsync(id);

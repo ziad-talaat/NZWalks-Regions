@@ -5,87 +5,119 @@ using Microsoft.IdentityModel.Tokens;
 using REPO.Core.Contract;
 using REPO.Core.DTO;
 using REPO.Core.Models;
+using REPO.EF.Service;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
-namespace REPO.EF.Service
+namespace Authorization_Refreshtoken.Service
 {
-    public class JwtService : IJwtService
+    public class JWTService : IJwtService
     {
-        private readonly JWTOptions _jwtOptions;
         private readonly IConfiguration _configuration;
         private readonly UserManager<ApplicationUser> _userManager;
-        public JwtService(IOptions<JWTOptions>jwt, IConfiguration config, UserManager<ApplicationUser> userManager)
+        private readonly JWTOptions _JWToptions;
+        public JWTService(IConfiguration configuration, IOptions<JWTOptions> jwtoption, UserManager<ApplicationUser> userManager)
         {
-            _jwtOptions = jwt.Value;
-            _configuration = config;
-            _userManager = userManager;
+            _configuration = configuration;
+            _userManager= userManager;
+            _JWToptions = jwtoption.Value;
         }
-
         public async Task<AuthanticatedResponse> CreateJwtToken(ApplicationUser user)
         {
+            DateTime expiration = DateTime.UtcNow.AddHours(_JWToptions.expiration);
 
-            DateTime expire = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_jwtOptions.Expiration));
 
-            var roles = await _userManager.GetRolesAsync(user);
-
-            List<Claim>claims = new List<Claim>
+            List<Claim> claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Email.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName.ToString()),
+
+               new Claim(JwtRegisteredClaimNames.Iat,   new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds().ToString(),ClaimValueTypes.Integer64),
+                new Claim(ClaimTypes.NameIdentifier,user.Id),
+                new Claim(ClaimTypes.Name,user.UserName),
             };
+
+            var roles =  await _userManager.GetRolesAsync(user);
 
             foreach(var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim(ClaimTypes.Role, role)); 
             }
 
-            var secret = _configuration.GetSection("jwt")["secretKey"];
-            if (string.IsNullOrEmpty(secret))
-            {
-                throw new InvalidOperationException("JWT SecretKey is not configured.");
-            }
-
-            var keyBytes = Encoding.UTF8.GetBytes(secret);
-            var securityKey = new SymmetricSecurityKey(keyBytes);
-
-            var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
 
 
-
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_JWToptions.secretKey));
+            SigningCredentials signCred = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             JwtSecurityToken tokenGenerator = new JwtSecurityToken(
-                      issuer: _jwtOptions.Issuer,
-                      audience: _jwtOptions.Audience,
-                      claims: claims,
-                      expires: expire,
-                      signingCredentials: signingCredentials
-            );   
-            
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+               issuer: _configuration["jwt:issuer"],
+               audience: _configuration["jwt:audience"],
 
-            string token = handler.WriteToken(tokenGenerator);
+                claims,
+                expires: expiration,
+                signingCredentials: signCred
+                );
+
+            JwtSecurityTokenHandler tokenHandler = new();
+            string token = tokenHandler.WriteToken(tokenGenerator);
 
             return new AuthanticatedResponse
             {
                 Token = token,
+                ExpirationDate = expiration,
                 Email = user.Email,
                 Name = user.UserName,
-                ExpirationDate = expire
+                RefreshToken = CreateRefreshToken(),
+                RF_Expiration = DateTime.UtcNow.AddDays(Convert.ToInt32(_configuration["RefreshToken:ExpirationDate"]))  
+            };
+        }
+
+        public string CreateRefreshToken()
+        {
+            byte[] bytes = new byte[64];
+            var randomNumberGenerator = RandomNumberGenerator.Create();
+            randomNumberGenerator.GetBytes(bytes);
+            return Convert.ToBase64String(bytes);
+        }
+
+
+
+        public ClaimsPrincipal GetPrinciplesFromJWTToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateAudience = true,
+               
+                ValidAudience = _configuration["jwt:audience"],
+
+                ValidateIssuer = true,
+                ValidIssuer = _configuration["jwt:issuer"],
+
+                 ValidateLifetime = false,
+                ValidateIssuerSigningKey = true,
+
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_JWToptions.secretKey))
+
             };
 
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+
+            ClaimsPrincipal principles = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validateToken);
+
+            if (validateToken is not JwtSecurityToken jwtsecurityToken || !jwtsecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("InvalidToken");
+            }
+            return principles;
         }
     }
 }
 
-    
-        
-               
+
 
 
 

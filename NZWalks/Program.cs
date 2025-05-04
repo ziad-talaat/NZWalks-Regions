@@ -1,10 +1,12 @@
 
+using Authorization_Refreshtoken.Service;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using NZ.Walks.Mapping;
 using REPO.Core.Contract;
 using REPO.Core.Models;
@@ -27,7 +29,7 @@ namespace NZ.Walks
             builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper(typeof(AutoMappingProfile));
             builder.Services.Configure<JWTOptions>(builder.Configuration.GetSection("jwt"));
-            builder.Services.AddTransient<IJwtService, JwtService>();
+            builder.Services.AddTransient<IJwtService, JWTService>();
             builder.Services.AddTransient<IImageService, ImageService>();
             builder.Services.AddHttpContextAccessor();
 
@@ -62,29 +64,66 @@ namespace NZ.Walks
             // var secretkey = Environment.GetEnvironmentVariable("JWT__SecretKey");
 
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = builder.Configuration.GetSection("jwt")["issuer"]??"localhost",
-                    ValidAudiences = new[] { builder.Configuration.GetSection("jwt")["audience"]??"localhost"},
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("jwt")["secretKey"])),
-
-                });
-
-
+          
 
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-             var app = builder.Build();
+                // Add JWT Bearer definition
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter your JWT token like this: Bearer {your token}"
+                });
+
+                // Apply JWT Bearer globally to all operations
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+            });
+
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options => options.TokenValidationParameters=new TokenValidationParameters()
+            {
+                ValidateIssuer=true,
+                ValidIssuer = builder.Configuration["jwt:issuer"],
+                ValidateAudience=true,
+                ValidAudience = builder.Configuration["jwt:audience"],
+                ValidateIssuerSigningKey=true,
+                IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwt:secretKey"])),
+
+                ValidateLifetime=true,
+            });
+
+
+           
+
+
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

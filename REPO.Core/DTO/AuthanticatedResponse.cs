@@ -12,6 +12,8 @@ namespace REPO.Core.DTO
         public  string  Email { get; set; }
         public  string  Token { get; set; }
         public  DateTime  ExpirationDate { get; set; }
+        public  string  RefreshToken { get; set; }
+        public  DateTime  RF_Expiration { get; set; }
 
     }
 }

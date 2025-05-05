@@ -8,7 +8,7 @@ A  web application to explore the best walking tracks and stunning regions acros
 - Detailed info on each walk (difficulty, distance, region, highlights)
 -  Stunning photos and user-submitted galleries
 -  Filter by region, track length, difficulty, and rating
--  Save favorite walks and create a personal hiking list
+
 
 
 ## 🚀 Tech Stack
